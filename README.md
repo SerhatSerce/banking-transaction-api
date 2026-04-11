@@ -6,6 +6,16 @@ This project demonstrates a clean backend architecture using layered design, DTO
 
 ---
 
+## 🚀 Live Demo
+
+**API Base URL:**
+https://banking-transaction-api-production.up.railway.app
+
+**Swagger UI:**
+https://banking-transaction-api-production.up.railway.app/swagger-ui.html
+
+---
+
 ## Features
 
 * Create bank accounts
@@ -18,6 +28,7 @@ This project demonstrates a clean backend architecture using layered design, DTO
 * Transaction management with `@Transactional`
 * Swagger API documentation
 * Clean layered architecture (Controller → Service → Repository)
+* Cloud deployment using Railway
 
 ---
 
@@ -71,21 +82,24 @@ com.serhat.bankingtransactionapi
 
 ## Technologies
 
-* Java 25
+* Java 21
 * Spring Boot
 * Spring Data JPA
 * Hibernate
-* PostgreSQL
+* PostgreSQL (Railway Cloud)
 * Maven
 * Swagger (OpenAPI)
+* Railway (Cloud Deployment)
 
 ---
 
 ## Base URL
 
-```
+**Local:**
 http://localhost:8080
-```
+
+**Production:**
+https://banking-transaction-api-production.up.railway.app
 
 ---
 
@@ -136,19 +150,19 @@ POST /accounts
 
 ## Database
 
-* **Database:** PostgreSQL
-* **Database Name:** banking_db
-* **Table:** account
+* PostgreSQL (Railway)
+* Automatically managed via environment variables
+* Hibernate: `ddl-auto=update`
 
 ---
 
 ## Swagger UI
 
-You can access and test the API via Swagger:
-
-```
+**Local:**
 http://localhost:8080/swagger-ui.html
-```
+
+**Production:**
+https://banking-transaction-api-production.up.railway.app/swagger-ui.html
 
 ---
 
@@ -180,10 +194,11 @@ BankingTransactionApiApplication.java
 * Implementing validation and exception handling
 * Managing transactions with `@Transactional`
 * Integrating PostgreSQL with Spring Data JPA
-* Documenting APIs using Swagger
+* Deploying backend applications to cloud (Railway)
+* Documenting APIs using Swagger (OpenAPI)
 
 ---
 
 ## Author
 
-Serhat
+Serhat 🚀
