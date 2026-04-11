@@ -14,6 +14,9 @@ https://banking-transaction-api-production.up.railway.app
 **Swagger UI:**
 https://banking-transaction-api-production.up.railway.app/swagger-ui.html
 
+> **Note:** The root URL does not return a homepage because this project is a backend REST API.
+> Use Swagger UI or API endpoints directly.
+
 ---
 
 ## Features
@@ -29,6 +32,8 @@ https://banking-transaction-api-production.up.railway.app/swagger-ui.html
 * Swagger API documentation
 * Clean layered architecture (Controller → Service → Repository)
 * Cloud deployment using Railway
+* RESTful API design principles
+* Production-ready deployment
 
 ---
 
@@ -121,7 +126,7 @@ https://banking-transaction-api-production.up.railway.app
 ### Create Account
 
 ```
-POST /accounts
+POST https://banking-transaction-api-production.up.railway.app/accounts
 ```
 
 ```json
