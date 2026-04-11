@@ -1,8 +1,10 @@
 # Banking Transaction API (Spring Boot)
 
-A RESTful Banking Transaction API built with Java, Spring Boot and PostgreSQL.
+🔹 Backend-focused project simulating real-world banking operations
 
-This project demonstrates a clean backend architecture using layered design, DTO pattern, validation, transaction management, and global exception handling.
+A production-ready RESTful Banking API built with Java, Spring Boot, and PostgreSQL.
+
+This project demonstrates clean backend architecture using layered design, DTO pattern, validation, transaction management, and global exception handling.
 
 ---
 
@@ -57,6 +59,9 @@ Controller → Service → Repository → Entity → Database
 ```
 com.serhat.bankingtransactionapi
 │
+├── config
+│   └── OpenApiConfig.java
+│
 ├── controller
 │   └── AccountController.java
 │
@@ -78,6 +83,8 @@ com.serhat.bankingtransactionapi
 │
 ├── exception
 │   ├── AccountNotFoundException.java
+│   ├── DuplicateAccountNumberException.java
+│   ├── InsufficientBalanceException.java
 │   └── GlobalExceptionHandler.java
 │
 └── BankingTransactionApiApplication.java
@@ -85,26 +92,22 @@ com.serhat.bankingtransactionapi
 
 ---
 
-## Technologies
+## Transaction Management
 
-* Java 21
-* Spring Boot
-* Spring Data JPA
-* Hibernate
-* PostgreSQL (Railway Cloud)
-* Maven
-* Swagger (OpenAPI)
-* Railway (Cloud Deployment)
+All money operations (deposit, withdraw, transfer) are handled using `@Transactional` to ensure data consistency.
+
+If a transaction fails at any step, the entire operation is rolled back to prevent inconsistent balances.
 
 ---
 
-## Base URL
+## Example Flow: Money Transfer
 
-**Local:**
-http://localhost:8080
-
-**Production:**
-https://banking-transaction-api-production.up.railway.app
+1. Client sends transfer request
+2. System validates accounts
+3. Balance is checked
+4. Money is withdrawn from sender
+5. Money is deposited to receiver
+6. Transaction is committed
 
 ---
 
@@ -122,8 +125,6 @@ https://banking-transaction-api-production.up.railway.app
 ---
 
 ## Example Request
-
-### Create Account
 
 ```
 POST https://banking-transaction-api-production.up.railway.app/accounts
@@ -153,21 +154,61 @@ POST https://banking-transaction-api-production.up.railway.app/accounts
 
 ---
 
+## Error Response Example
+
+```json
+{
+  "timestamp": "2026-04-11T14:30:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Insufficient balance",
+  "path": "/accounts/withdraw"
+}
+```
+
+---
+
 ## Database
 
-* PostgreSQL (Railway)
-* Automatically managed via environment variables
+* PostgreSQL (Railway managed service)
+* Connection configured via environment variables (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`)
 * Hibernate: `ddl-auto=update`
 
 ---
 
-## Swagger UI
+## Environment Variables
 
-**Local:**
-http://localhost:8080/swagger-ui.html
+```
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=banking_db
+PGUSER=postgres
+PGPASSWORD=yourpassword
+```
 
-**Production:**
-https://banking-transaction-api-production.up.railway.app/swagger-ui.html
+---
+
+## Technologies
+
+* Java 21
+* Spring Boot
+* Spring Data JPA
+* Hibernate
+* PostgreSQL
+* Maven
+* Swagger (OpenAPI)
+* Railway (Cloud Deployment)
+* REST API
+
+---
+
+## Limitations / Future Improvements
+
+* JWT-based authentication & authorization
+* Pagination and filtering for account listing
+* Logging (SLF4J / Logback)
+* Rate limiting & security enhancements
+* Unit and integration tests
 
 ---
 
@@ -181,7 +222,7 @@ git clone https://github.com/SerhatSerce/banking-transaction-api.git
 
 2. Open in VS Code / IntelliJ
 
-3. Configure PostgreSQL in `application.properties`
+3. Configure PostgreSQL via environment variables
 
 4. Run the application
 
@@ -201,6 +242,7 @@ BankingTransactionApiApplication.java
 * Integrating PostgreSQL with Spring Data JPA
 * Deploying backend applications to cloud (Railway)
 * Documenting APIs using Swagger (OpenAPI)
+* Configuring environment-based database connections
 
 ---
 
