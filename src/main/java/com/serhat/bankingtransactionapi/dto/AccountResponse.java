@@ -1,41 +1,25 @@
-package com.serhat.bankingtransactionapi.entity;
+package com.serhat.bankingtransactionapi.dto;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "account")
-public class Account {
+public class AccountResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String accountNumber;
-
-    @Column(nullable = false)
     private String ownerName;
-
-    @Column(nullable = false)
     private BigDecimal balance;
-
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Account() {
+    public AccountResponse() {
     }
 
-    public Account(String accountNumber, String ownerName, BigDecimal balance) {
+    public AccountResponse(Long id, String accountNumber, String ownerName, BigDecimal balance, LocalDateTime createdAt) {
+        this.id = id;
         this.accountNumber = accountNumber;
         this.ownerName = ownerName;
         this.balance = balance;
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -58,6 +42,10 @@ public class Account {
         return createdAt;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
@@ -68,5 +56,9 @@ public class Account {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
