@@ -8,9 +8,8 @@ import com.serhat.bankingtransactionapi.dto.WithdrawRequest;
 import com.serhat.bankingtransactionapi.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
@@ -28,10 +27,13 @@ public class AccountController {
         return accountService.createAccount(request);
     }
 
-    @Operation(summary = "Get all accounts")
+    @Operation(summary = "Get all accounts with pagination")
     @GetMapping
-    public List<AccountResponse> getAllAccounts() {
-        return accountService.getAllAccounts();
+    public Page<AccountResponse> getAllAccounts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return accountService.getAllAccounts(page, size);
     }
 
     @Operation(summary = "Get account by id")
