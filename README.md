@@ -4,38 +4,40 @@
 
 A production-ready RESTful Banking API built with Java, Spring Boot, and PostgreSQL.
 
-This project demonstrates clean backend architecture using layered design, DTO pattern, validation, transaction management, and global exception handling.
+This project demonstrates clean backend architecture using layered design, DTO pattern, validation, transaction management, global exception handling, JWT authentication, logging, pagination, and unit testing.
 
----
+🚀 Live Demo
 
-## 🚀 Live Demo
-
-**API Base URL:**
+API Base URL:
 https://banking-transaction-api-production.up.railway.app
 
-**Swagger UI:**
+Swagger UI:
 https://banking-transaction-api-production.up.railway.app/swagger-ui.html
 
-> **Note:** The root URL does not return a homepage because this project is a backend REST API.
-> Use Swagger UI or API endpoints directly.
+Note: The root URL does not return a homepage because this project is a backend REST API. Use Swagger UI or API endpoints directly.
 
 ---
 
 ## Features
 
-* Create bank accounts
-* Deposit money into accounts
-* Withdraw money from accounts
-* Transfer money between accounts
-* DTO-based request/response structure
-* Input validation with Hibernate Validator
-* Global exception handling
-* Transaction management with `@Transactional`
-* Swagger API documentation
-* Clean layered architecture (Controller → Service → Repository)
-* Cloud deployment using Railway
-* RESTful API design principles
-* Production-ready deployment
+Create bank accounts  
+Deposit money into accounts  
+Withdraw money from accounts  
+Transfer money between accounts  
+
+JWT-based authentication & authorization  
+DTO-based request/response structure  
+Input validation with Hibernate Validator  
+Global exception handling  
+Transaction management with @Transactional  
+Pagination support (page, size)  
+Logging with SLF4J  
+Unit testing with JUnit & Mockito  
+Swagger API documentation  
+Clean layered architecture (Controller → Service → Repository)  
+Cloud deployment using Railway  
+RESTful API design principles  
+Production-ready backend practices  
 
 ---
 
@@ -45,41 +47,48 @@ The project follows a layered architecture:
 
 Controller → Service → Repository → Entity → Database
 
-* **Controller Layer:** Handles HTTP requests and API endpoints
-* **Service Layer:** Contains business logic
-* **Repository Layer:** Handles database operations via Spring Data JPA
-* **Entity Layer:** Represents database tables
-* **DTO Layer:** Separates API models from database models
-* **Exception Handling:** Centralized error handling using `@RestControllerAdvice`
+Controller Layer: Handles HTTP requests and API endpoints  
+Service Layer: Contains business logic  
+Repository Layer: Handles database operations via Spring Data JPA  
+Entity Layer: Represents database tables  
+DTO Layer: Separates API models from database models  
+Security Layer: JWT authentication & authorization  
+Exception Handling: Centralized error handling using @RestControllerAdvice  
 
 ---
 
 ## Project Structure
 
-```
 com.serhat.bankingtransactionapi
 │
 ├── config
-│   └── OpenApiConfig.java
+│   ├── OpenApiConfig.java
+│   └── SecurityConfig.java
 │
 ├── controller
-│   └── AccountController.java
+│   ├── AccountController.java
+│   └── AuthController.java
 │
 ├── service
-│   └── AccountService.java
+│   ├── AccountService.java
+│   └── AuthService.java
 │
 ├── repository
-│   └── AccountRepository.java
+│   ├── AccountRepository.java
+│   └── UserRepository.java
 │
 ├── entity
-│   └── Account.java
+│   ├── Account.java
+│   └── User.java
 │
 ├── dto
 │   ├── CreateAccountRequest.java
 │   ├── AccountResponse.java
 │   ├── DepositRequest.java
 │   ├── WithdrawRequest.java
-│   └── TransferRequest.java
+│   ├── TransferRequest.java
+│   ├── AuthRequest.java
+│   └── AuthResponse.java
 │
 ├── exception
 │   ├── AccountNotFoundException.java
@@ -88,75 +97,92 @@ com.serhat.bankingtransactionapi
 │   └── GlobalExceptionHandler.java
 │
 └── BankingTransactionApiApplication.java
-```
+
+---
+
+## Authentication (JWT)
+
+This API uses JWT (JSON Web Token) for authentication.
+
+Flow:
+
+1. Register a user → /auth/register  
+2. Login → /auth/login  
+3. Receive JWT token  
+4. Use token in requests  
+
+Header format:
+
+Authorization: Bearer <your_token>
 
 ---
 
 ## Transaction Management
 
-All money operations (deposit, withdraw, transfer) are handled using `@Transactional` to ensure data consistency.
+All money operations (deposit, withdraw, transfer) are handled using @Transactional to ensure data consistency.
 
-If a transaction fails at any step, the entire operation is rolled back to prevent inconsistent balances.
+If a transaction fails at any step, the entire operation is rolled back.
 
 ---
 
 ## Example Flow: Money Transfer
 
-1. Client sends transfer request
-2. System validates accounts
-3. Balance is checked
-4. Money is withdrawn from sender
-5. Money is deposited to receiver
-6. Transaction is committed
+Client sends transfer request  
+System validates accounts  
+Balance is checked  
+Money is withdrawn from sender  
+Money is deposited to receiver  
+Transaction is committed  
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint           | Description          |
-| ------ | ------------------ | -------------------- |
-| GET    | /accounts          | List all accounts    |
-| GET    | /accounts/{id}     | Get account by ID    |
-| POST   | /accounts          | Create a new account |
-| POST   | /accounts/deposit  | Deposit money        |
-| POST   | /accounts/withdraw | Withdraw money       |
-| POST   | /accounts/transfer | Transfer money       |
+### Auth
+
+POST /auth/register → Register user  
+POST /auth/login → Login & get JWT  
+
+### Accounts
+
+GET /accounts → List accounts (pagination supported)  
+POST /accounts → Create account  
+POST /accounts/deposit → Deposit money  
+POST /accounts/withdraw → Withdraw money  
+POST /accounts/transfer → Transfer money  
+
+---
+
+## Pagination Example
+
+GET /accounts?page=0&size=10
 
 ---
 
 ## Example Request
 
-```
 POST https://banking-transaction-api-production.up.railway.app/accounts
-```
 
-```json
 {
   "accountNumber": "TR1001",
   "ownerName": "Serhat",
   "balance": 5000
 }
-```
 
 ---
 
 ## Example Response
 
-```json
 {
-  "id": 1,
   "accountNumber": "TR1001",
   "ownerName": "Serhat",
-  "balance": 5000,
-  "createdAt": "2026-04-11T14:30:00"
+  "balance": 5000
 }
-```
 
 ---
 
 ## Error Response Example
 
-```json
 {
   "timestamp": "2026-04-11T14:30:00",
   "status": 400,
@@ -164,85 +190,72 @@ POST https://banking-transaction-api-production.up.railway.app/accounts
   "message": "Insufficient balance",
   "path": "/accounts/withdraw"
 }
-```
 
 ---
 
 ## Database
 
-* PostgreSQL (Railway managed service)
-* Connection configured via environment variables (`PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD`)
-* Hibernate: `ddl-auto=update`
+PostgreSQL (Railway managed service)
 
----
+Connection configured via environment variables:
 
-## Environment Variables
+PGHOST  
+PGPORT  
+PGDATABASE  
+PGUSER  
+PGPASSWORD  
 
-```
-PGHOST=localhost
-PGPORT=5432
-PGDATABASE=banking_db
-PGUSER=postgres
-PGPASSWORD=yourpassword
-```
+Hibernate: ddl-auto=update  
 
 ---
 
 ## Technologies
 
-* Java 21
-* Spring Boot
-* Spring Data JPA
-* Hibernate
-* PostgreSQL
-* Maven
-* Swagger (OpenAPI)
-* Railway (Cloud Deployment)
-* REST API
-
----
-
-## Limitations / Future Improvements
-
-* JWT-based authentication & authorization
-* Pagination and filtering for account listing
-* Logging (SLF4J / Logback)
-* Rate limiting & security enhancements
-* Unit and integration tests
+Java 17  
+Spring Boot  
+Spring Data JPA  
+Hibernate  
+PostgreSQL  
+Maven  
+Swagger (OpenAPI)  
+JWT (Authentication)  
+SLF4J (Logging)  
+JUnit & Mockito (Testing)  
+Railway (Cloud Deployment)  
 
 ---
 
 ## How to Run
 
-1. Clone the repository
+Clone the repository
 
-```
 git clone https://github.com/SerhatSerce/banking-transaction-api.git
-```
 
-2. Open in VS Code / IntelliJ
+Configure PostgreSQL via environment variables
 
-3. Configure PostgreSQL via environment variables
+Run the application
 
-4. Run the application
+./mvnw spring-boot:run
 
-```
-BankingTransactionApiApplication.java
-```
+Open Swagger UI
+
+http://localhost:8080/swagger-ui.html
 
 ---
 
 ## Learning Outcomes
 
-* Building REST APIs with Spring Boot
-* Applying layered architecture
-* Using DTO for clean API design
-* Implementing validation and exception handling
-* Managing transactions with `@Transactional`
-* Integrating PostgreSQL with Spring Data JPA
-* Deploying backend applications to cloud (Railway)
-* Documenting APIs using Swagger (OpenAPI)
-* Configuring environment-based database connections
+Building REST APIs with Spring Boot  
+Applying layered architecture  
+Using DTO for clean API design  
+Implementing validation and exception handling  
+Managing transactions with @Transactional  
+Implementing JWT authentication  
+Writing unit tests with Mockito  
+Using pagination in APIs  
+Logging backend operations  
+Deploying backend applications to cloud (Railway)  
+Documenting APIs using Swagger  
 
 ---
 
