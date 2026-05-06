@@ -10,14 +10,19 @@ This project demonstrates clean backend architecture using layered design, DTO p
 
 ## Live Demo
 
+This project is a backend-only REST API.  
+The root URL may return `403 Forbidden` because there is no public homepage endpoint.
+
 API Base URL:  
 https://banking-transaction-api-production.up.railway.app
 
 Swagger UI:  
 https://banking-transaction-api-production.up.railway.app/swagger-ui.html
 
-Note: This project is a backend-only REST API. Use Swagger UI to interact with endpoints.
+OpenAPI Docs:  
+https://banking-transaction-api-production.up.railway.app/v3/api-docs
 
+> Use Swagger UI to test and interact with the API endpoints.
 ---
 
 ## Features
